@@ -42,6 +42,7 @@ venv\Scripts\activate     # Windows
 Встановіть залежності:
 
 pip install -r requirements.txt
+### (Якщо виникають проблеми з встановленням бібліотек - виконайте окремо pip install numpy==1.26.4 )
 Запуск проекту
 1. Запуск сервера FastAPI
 uvicorn api.main:app --reload
@@ -101,22 +102,3 @@ web: uvicorn api.main:app --host=0.0.0.0 --port=${PORT:-8000}
 MIT License. Деталі див. у файлі LICENSE.
 
 ---
-
-**`requirements.txt`**
-
-```plaintext
-# Основні бібліотеки
-fastapi==0.75.2
-uvicorn==0.17.6
-python-multipart==0.0.5
-Pillow==9.2.0
-numpy==1.23.3
-scikit-learn==1.1.2
-matplotlib==3.6.0
-seaborn==0.12.1
-tensorflow==2.10.0
-tensorflow-model-optimization==0.7.3
-onnxruntime==1.12.1
-tf2onnx==1.13.0
-cairosvg==2.6.0
-requests==2.28.1
