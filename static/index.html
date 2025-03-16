@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UI2HTML Converter</title>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: 20px auto; }
+        #result { margin-top: 20px; }
+        .code-block { 
+            background: #f8f9fa; 
+            padding: 15px; 
+            border-radius: 5px; 
+            margin-top: 10px; 
+            white-space: pre-wrap; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Завантажте зображення UI-елемента</h1>
+    <input type="file" id="imageInput" accept=".png, .jpg, .jpeg">
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('imageInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('http://localhost:8000/convert/', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP помилка: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log("Відповідь сервера:", data);
+
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = ''; // Очистити попередній результат
+
+                if (data.code) {
+                    // Розділити HTML і CSS
+                    const [htmlPart, cssPart] = data.code.split('<style>');
+                    const cssContent = cssPart ? cssPart.split('</style>')[0] : '';
+
+                    // Додати HTML
+                    const htmlContainer = document.createElement('div');
+                    htmlContainer.innerHTML = htmlPart.trim();
+                    resultDiv.appendChild(htmlContainer);
+
+                    // Додати CSS
+                    if (cssContent) {
+                        const styleTag = document.createElement('style');
+                        styleTag.textContent = cssContent.trim();
+                        document.head.appendChild(styleTag);
+                    }
+
+                    // Додати блок з кодом для копіювання
+                    const codeBlock = document.createElement('div');
+                    codeBlock.className = 'code-block';
+                    codeBlock.textContent = data.code;
+                    resultDiv.appendChild(codeBlock);
+
+                } else {
+                    resultDiv.textContent = 'Код не знайдено';
+                }
+
+            } catch (error) {
+                console.error('Помилка:', error);
+                const resultDiv = document.getElementById('result');
+                resultDiv.textContent = `Помилка: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
