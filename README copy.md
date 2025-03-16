@@ -36,20 +36,14 @@
    cd ui2html
 Створіть віртуальне середовище:
 
-bash
-Copy
 python -m venv venv
 source venv/bin/activate  # Linux/macOS
 venv\Scripts\activate     # Windows
 Встановіть залежності:
 
-bash
-Copy
 pip install -r requirements.txt
 Запуск проекту
 1. Запуск сервера FastAPI
-bash
-Copy
 uvicorn api.main:app --reload
 Сервер буде доступний за адресою: http://localhost:8000.
 
@@ -100,16 +94,11 @@ curl -X POST -F "file=@test_image.png" http://localhost:8000/convert/
 Для публічного доступу використовуйте хостинги на кшталт Heroku або Render:
 
 Створіть Procfile:
-
-plaintext
-Copy
 web: uvicorn api.main:app --host=0.0.0.0 --port=${PORT:-8000}
 Налаштуйте змінні середовища та деплойте проект.
 
 Ліцензія
 MIT License. Деталі див. у файлі LICENSE.
-
-Copy
 
 ---
 
